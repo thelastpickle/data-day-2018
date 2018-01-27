@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+  cassandra:
+    image: cassandra:3.11.1
+    env_file:
+      - env/cassandra.env
+    volumes:
+      - ./cassandra/data:/var/lib/cassandra
+
+  cqlsh:
+    image: cassandra:3.11.1
+    command: cqlsh cassandra
+
+  load-schema:
+    image: cassandra:3.11.1
+    command: cqlsh cassandra -f /schema.cql
+    env_file:
+      - env/cassandra.env
+    volumes:
+      - ./cassandra/schema.cql:/schema.cql
+
+  load-data:
+    build: .
+    command: ./bin/01.load.py
+    env_file:
+      - env/cassandra.env
+    volumes:
+      - .:/opt
+
+  analyze:
+    build: .
+    command: ./bin/02.analyze.py
+    env_file:
+      - env/cassandra.env
+    volumes:
+      - .:/opt
