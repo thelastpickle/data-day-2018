@@ -13,6 +13,18 @@ To get the most out of the project, we recommend installing the following softwa
 * Docker Compose: https://docs.docker.com/compose/install/
 
 
+### Agenda
+
+* Download and Install Docker
+* Build the Images
+* Introduction
+* Quick Polls
+* Overview
+* Docker Compose
+* Project Internals
+* Questions
+
+
 ### Commands
 
 ```bash
