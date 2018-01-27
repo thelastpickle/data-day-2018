@@ -45,7 +45,7 @@ coin_ids = ['aeon', 'agoras-tokens', 'bitbay', 'bitcny', 'bitcoin',
             'viacoin', 'voxels', 'whitecoin']
 # back up presentation list, for very slow internet connection
 coin_ids = ['bitcoin', 'ethereum', 'factom', 'litecoin', 'maidsafecoin',
-            'monero', 'nem', 'stellar', 'verge']
+            'monero', 'nem', 'stellar']
 for coin in coin_ids:
     coins.append({coin: [2016, 2017, 2018]})
 
