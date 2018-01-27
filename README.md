@@ -52,3 +52,10 @@ docker-compose run analyze
 # view Machine Intelligence result
 open result.png
 ```
+
+
+### Take Away
+
+Continue playing with Docker Compose and Cassandra with my other project:
+
+* https://github.com/thelastpickle/docker-cassandra-bootstrap
