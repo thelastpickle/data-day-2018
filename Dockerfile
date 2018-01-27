@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:16.04
 
 # install Tensorflow and Cassandra related requirements
 RUN apt-get update \
