@@ -15,8 +15,6 @@ services:
   load-schema:
     image: cassandra:3.11.1
     command: cqlsh cassandra -f /schema.cql
-    env_file:
-      - env/cassandra.env
     volumes:
       - ./cassandra/schema.cql:/schema.cql
 
