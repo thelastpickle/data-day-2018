@@ -15,19 +15,36 @@ from cassandra.policies import DCAwareRoundRobinPolicy
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# define which coins and years to track
-coins = [
-    {'bitcoin': [2016, 2017, 2018]},
-    {'litecoin': [2016, 2017, 2018]},
-    {'ethereum': [2016, 2017, 2018]},
-]
-
 # the number of allowed pending futures
 # arbitrarily small for effect
-MAX_FUTURE_QUEUE = 100
+MAX_FUTURE_QUEUE = 5000
+
+# if running at a conference, only use coin_ids
+# if running outside of a conference, set to false to import all cryptocurrencies
+PRESENTATION = True
 
 # for Linux time calculations
 EPOCH = datetime.utcfromtimestamp(0).date()
+
+# define which coins and years to track
+coins = []
+coin_ids = ['aeon', 'agoras-tokens', 'bitbay', 'bitcny', 'bitcoin',
+            'bitcoindark', 'bitcrystals', 'bitsend', 'blackcoin', 'blocknet',
+            'burst', 'clams', 'counterparty', 'crown', 'dash', 'decred',
+            'diamond', 'digibyte', 'digitalnote', 'dimecoin', 'dogecoin',
+            'einsteinium', 'emercoin', 'energycoin', 'ethereum', 'expanse',
+            'factom', 'faircoin', 'feathercoin', 'florincoin', 'foldingcoin',
+            'gambit', 'gamecredits', 'gridcoin', 'groestlcoin', 'gulden',
+            'hempcoin', 'iocoin', 'jinn', 'litecoin', 'maidsafecoin',
+            'mintcoin', 'monacoin', 'monero', 'monetaryunit', 'mooncoin',
+            'namecoin', 'nav-coin', 'nem', 'neoscoin', 'newyorkcoin', 'nimiq',
+            'nushares', 'nxt', 'okcash', 'omni', 'paccoin', 'pandacoin-pnd',
+            'peercoin', 'potcoin', 'radium', 'reddcoin', 'ripple', 'rubycoin',
+            'salus', 'shift', 'sibcoin', 'solarcoin', 'stealthcoin', 'stellar',
+            'supernet-unity', 'synereo', 'verge', 'vericoin', 'vertcoin',
+            'viacoin', 'voxels', 'whitecoin']
+for coin in coin_ids:
+    coins.append({coin: [2016, 2017, 2018]})
 
 
 def get_session():
@@ -96,32 +113,36 @@ def main():
     futures = []
 
     # comment out for better conference support
-    coins = []
-    MAX_FUTURE_QUEUE = 5000
-    logger.info('Grabbing a list of all cryptocurrencies...')
-    response = requests.get('http://coinmarketcap.northpole.ro/coins.json')
-    json_response = response.json()
-    logger.info('Found %s cryptocurrencies...', len(json_response['coins']))
-    logger.info('Filtering for long-lived cryptocurrencies...')
-    for coin in json_response['coins']:
-        if not '2016' in coin['periods'] \
-                or not '2018' in coin['periods']:
-            continue
-        periods = coin['periods']
-        periods.remove('14days')
-        coins.append({coin['identifier']: periods})
+    if not PRESENTATION:
+        del coins[:]
+        logger.info('Grabbing a list of all cryptocurrencies...')
+        response = requests.get('http://coinmarketcap.northpole.ro/coins.json')
+        json_response = response.json()
+        logger.info('Found %s cryptocurrencies...',
+                    len(json_response['coins']))
+        logger.info('Filtering for long-lived cryptocurrencies...')
+        for coin in json_response['coins']:
+            if not '2016' in coin['periods'] \
+                    or not '2018' in coin['periods']:
+                continue
+            periods = coin['periods']
+            periods.remove('14days')
+            coins.append({coin['identifier']: periods})
 
     logger.info('Loading %s cryptocurrencies\' historical data...', len(coins))
-    for coin in coins:
+    for i, coin in enumerate(coins):
         years = coin.values()[0]
         coin = coin.keys()[0]
         for year in years:
             # hit a web-based API to grab historical cryptocurrency prices
-            logging.info('Grabbing %s historical data for: %s...', year, coin)
+            logging.info('Grabbing %s historical data for: %s [%s/%s]...',
+                         year, coin, i, len(coins))
             try:
                 response = requests.get(
                     "http://coinmarketcap.northpole.ro/history.json?coin=%s&period=%s"
                     % (coin, year))
+            except KeyboardInterrupt:
+                exit(1)
             except:
                 future = session.execute_async(coin_deletion, (coin,))
                 futures.append(future)
