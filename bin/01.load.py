@@ -126,6 +126,7 @@ def main():
                 future = session.execute_async(coin_deletion, (coin,))
                 futures.append(future)
                 logger.exception('Failed to get API response')
+                break
 
             try:
                 json_response = response.json()
@@ -133,6 +134,7 @@ def main():
                 future = session.execute_async(coin_deletion, (coin,))
                 futures.append(future)
                 logger.error(response)
+                break
 
             if 'error' in json_response:
                 continue
