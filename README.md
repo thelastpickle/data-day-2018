@@ -8,9 +8,9 @@ The presentation will come with a companion Github repository that contains a Do
 
 To get the most out of the project, we recommend installing the following software before the meeting:
 
-Docker Engine (for Mac): https://docs.docker.com/docker-for-mac/install/
-Docker Engine (Ubuntu): https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
-Docker Compose: https://docs.docker.com/compose/install/
+* Docker Engine (for Mac): https://docs.docker.com/docker-for-mac/install/
+* Docker Engine (Ubuntu): https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
+* Docker Compose: https://docs.docker.com/compose/install/
 
 
 ### Commands
