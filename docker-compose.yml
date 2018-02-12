@@ -5,8 +5,10 @@ services:
     image: cassandra:3.11.1
     env_file:
       - env/cassandra.env
-    volumes:
-      - ./cassandra/data:/var/lib/cassandra
+    # uncomment this line if you're using OSX
+    # Linux environments require extra logic to explictly set the correct permissions
+    # volumes:
+    #   - ./cassandra/data:/var/lib/cassandra
 
   cqlsh:
     image: cassandra:3.11.1
