@@ -5,4 +5,4 @@ pip==9.0.1
 requests==2.20.0
 sklearn==0.0
 scipy==1.0.0
-tensorflow==1.4.1
+tensorflow==1.13.1
